@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<fontFamilies>
+
+	<fontFamily name="FreeUniversal">
+		<normal>com/versionsystem/common/report/fonts/FreeUniversal-Regular.ttf</normal>
+		<bold>com/versionsystem/common/report/fonts/FreeUniversal-Bold.ttf</bold>
+		<italic>com/versionsystem/common/report/fonts/FreeUniversal-Italic.ttf</italic>
+		<boldItalic>com/versionsystem/common/report/fonts/FreeUniversal-BoldItalic.ttf</boldItalic>
+		<pdfEncoding>Cp1252</pdfEncoding>
+		<pdfEmbedded>true</pdfEmbedded>
+	</fontFamily>
+
+</fontFamilies>

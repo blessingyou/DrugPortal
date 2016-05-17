@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:p="http://www.springframework.org/schema/p"      	
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xmlns:tx="http://www.springframework.org/schema/tx"
+       	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       	xmlns:repository="http://www.springframework.org/schema/data/repository"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans.xsd			
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx.xsd
+			http://www.springframework.org/schema/jdbc 
+			http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+			http://www.springframework.org/schema/data/jpa
+   			http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+   			http://www.springframework.org/schema/data/repository
+       		http://www.springframework.org/schema/data/repository/spring-repository.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+	<context:property-placeholder properties-ref="deployProperties" />
+
+	<tx:annotation-driven transaction-manager="transactionManager" />	
+	
+	<jpa:repositories base-package="com.versionsystem.service.repo" />
+
+	<!-- Activate Spring Data JPA repository support 
+  	<jpa:repositories base-package="com.versionsystem.service.repo" />-->
+  	
+	<!-- Declare a datasource that has pooling capabilities -->
+	<!--<bean id="jpaDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close"
+		p:driverClass="${app.jdbc.driverClassName}"
+		p:jdbcUrl="${app.jdbc.url}"
+		p:user="${app.jdbc.username}"
+		p:password="${app.jdbc.password}"
+		p:acquireIncrement="5"
+		p:idleConnectionTestPeriod="60"
+		p:maxPoolSize="100"
+		p:maxStatements="50"
+		p:minPoolSize="2" />
+		-->  	
+		<bean id="jpaDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close"
+		p:driverClass="oracle.jdbc.driver.OracleDriver"
+		p:jdbcUrl="jdbc:oracle:thin:@192.168.88.17:1521:XE"
+		p:user="drugportal"
+		p:password="version"
+		p:acquireIncrement="5"
+		p:idleConnectionTestPeriod="60"
+		p:maxPoolSize="100"
+		p:maxStatements="50"
+		p:minPoolSize="2" />
+
+ 	<!-- Declare a JPA entityManagerFactory -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" 
+		p:persistenceXmlLocation="./WEB-INF/spring/persistence.xml"
+		p:persistenceUnitName="hibernatePersistenceUnit"
+		p:dataSource-ref="jpaDataSource"
+		p:jpaVendorAdapter-ref="hibernateVendor"/>
+
+	<!-- Specify our ORM vendor -->
+	<bean id="hibernateVendor" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+	            p:showSql="false"/>
+
+	<!-- Declare a transaction manager-->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" 
+		p:entityManagerFactory-ref="entityManagerFactory"/>
+	
+<bean id="domainConfiguration" class="org.apache.commons.configuration.DatabaseConfiguration">
+  <constructor-arg type="javax.sql.DataSource" ref="jpaDataSource"/>
+   <constructor-arg value="W_SYSTEM_PARAMETER" />
+   <constructor-arg value="PARAMETER_KEY" /> 
+   <constructor-arg value="PARAMETER_VALUE" />
+</bean>
+ 
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+ <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+ <property name="properties">
+  <bean class="org.apache.commons.configuration.ConfigurationConverter" factory-method="getProperties">
+   <constructor-arg>
+     <ref bean="domainConfiguration" />
+   </constructor-arg>
+  </bean>
+ </property>
+</bean>
+ 			
+</beans>

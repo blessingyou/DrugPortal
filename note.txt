@@ -1,0 +1,13 @@
+以下class若重新被jpa生成新的類，注意將Date的類型的屬性的@Temporal(TemporalType.DATE)去掉，當這個日期需要記住具體時間時候。
+
+
+ClinicBookList被重新生成后，注意將startTime 改成start，endTime改成end，同時去掉@Temporal(TemporalType.DATE)
+
+run maven command to generate spring jpa query class .簡體字的存在會導致此命令失敗。請將WorkhourService。java 和 SecurityLoginFailureHandler.java中的中文去掉再運行。或者在pom.xml
+中增加以下配置：
+
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+mvn generate-sources
+
