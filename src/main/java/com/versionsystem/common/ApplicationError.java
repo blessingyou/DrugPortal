@@ -7,6 +7,7 @@ public enum ApplicationError {
 	NumberFormatedException("APP1002","Invalid number"),
 	InvalidUserException("APP1003","Invalid user password"),
 	IOException("APP10000","IO exception"),
+	ParameterMappingException("APP1005","Drug mapping parameters do not match"),
 	ReferencedByOthers("APP2001","ORA-02292:Data referenced by other datas!");
 	private  String code="";
     private  String message;
