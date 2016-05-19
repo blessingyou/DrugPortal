@@ -11,3 +11,5 @@ run maven command to generate spring jpa query class .簡體字的存在會導�
 
 mvn generate-sources
 
+recommendation:use oracle jdk instead of openjdk
+
