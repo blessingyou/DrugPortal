@@ -53,6 +53,21 @@ public class WDrugMappingAlert implements Serializable {
 	
 	@Column(name="REQUEST_DATE")
 	private Date requestDate;
+	
+	@Column(name="MAPPING_CODE")
+	private String mappingCode;
+	
+	@Column(name="MAPPING_BRAND")
+	private String mappingBrand;
+	
+	@Column(name="MAPPING_NAME")
+	private String mappingName;
+	
+	@Column(name="MAPPING_UNIT")
+	private String mappingUnit;
+	
+	@Column(name="MAPPING_PRICE")
+	private BigDecimal mappingPrice;
 
 	public WDrugMappingAlert() {
 	}
@@ -151,6 +166,46 @@ public class WDrugMappingAlert implements Serializable {
 
 	public void setRequestDate(Date requestDate) {
 		this.requestDate = requestDate;
+	}
+
+	public String getMappingCode() {
+		return mappingCode;
+	}
+
+	public void setMappingCode(String mappingCode) {
+		this.mappingCode = mappingCode;
+	}
+
+	public String getMappingBrand() {
+		return mappingBrand;
+	}
+
+	public void setMappingBrand(String mappingBrand) {
+		this.mappingBrand = mappingBrand;
+	}
+
+	public String getMappingName() {
+		return mappingName;
+	}
+
+	public void setMappingName(String mappingName) {
+		this.mappingName = mappingName;
+	}
+
+	public String getMappingUnit() {
+		return mappingUnit;
+	}
+
+	public void setMappingUnit(String mappingUnit) {
+		this.mappingUnit = mappingUnit;
+	}
+
+	public BigDecimal getMappingPrice() {
+		return mappingPrice;
+	}
+
+	public void setMappingPrice(BigDecimal mappingPrice) {
+		this.mappingPrice = mappingPrice;
 	}
 
 }
