@@ -3,6 +3,8 @@ Drug data center server side
 
 
 how to import to local
+
+
 I
 1.mkdir DrugPortal
 
@@ -18,3 +20,8 @@ II
 
 1.open the folder where DrugPortal is located 
 2.git clone https://github.com/VersionSystem/DrugPortal.git
+
+
+git push problem:error: src refspec master does not match any
+
+git push origin HEAD:master
