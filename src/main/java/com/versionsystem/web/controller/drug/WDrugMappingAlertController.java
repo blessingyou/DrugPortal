@@ -15,7 +15,7 @@ import com.versionsystem.web.model.drug.WDrugMappingAlertUI;
 
 
 @RestController
-@RequestMapping("/drugMapping")
+@RequestMapping("/drugMappingAlert")
 public class WDrugMappingAlertController {
 	@Autowired
 	private WDrugMappingAlertService drugMappingAlertService;
