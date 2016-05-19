@@ -2,7 +2,8 @@
 Drug data center server side
 
 
-how to import to local
+how to import to local(method II is recommended)
+
 I
 1.mkdir DrugPortal
 
