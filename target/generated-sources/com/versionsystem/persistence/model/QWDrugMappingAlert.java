@@ -37,6 +37,16 @@ public class QWDrugMappingAlert extends EntityPathBase<WDrugMappingAlert> {
 
     public final BooleanPath mapFlag = createBoolean("mapFlag");
 
+    public final StringPath mappingBrand = createString("mappingBrand");
+
+    public final StringPath mappingCode = createString("mappingCode");
+
+    public final StringPath mappingName = createString("mappingName");
+
+    public final NumberPath<java.math.BigDecimal> mappingPrice = createNumber("mappingPrice", java.math.BigDecimal.class);
+
+    public final StringPath mappingUnit = createString("mappingUnit");
+
     public final StringPath orgCode = createString("orgCode");
 
     public final StringPath requestBy = createString("requestBy");
