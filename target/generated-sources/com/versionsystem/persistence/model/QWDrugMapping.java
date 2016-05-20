@@ -23,6 +23,8 @@ public class QWDrugMapping extends EntityPathBase<WDrugMapping> {
 
     public final StringPath drugCode = createString("drugCode");
 
+    public final StringPath drugName = createString("drugName");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath mappingBrand = createString("mappingBrand");

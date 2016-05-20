@@ -23,6 +23,8 @@ public class WDrugMapping implements Serializable {
 
 	@Column(name="DRUG_CODE")
 	private String drugCode;
+	@Column(name="DRUG_NAME")
+	private String drugName;
 
 	@Column(name="MAPPING_BRAND")
 	private String mappingBrand;
@@ -82,6 +84,14 @@ public class WDrugMapping implements Serializable {
 
 	public void setOrgCode(String orgCode) {
 		this.orgCode = orgCode;
+	}
+
+	public String getDrugName() {
+		return drugName;
+	}
+
+	public void setDrugName(String drugName) {
+		this.drugName = drugName;
 	}
 
 }

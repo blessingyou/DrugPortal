@@ -18,6 +18,8 @@ public class WDrugMappingUI implements Serializable {
 
 	
 	private String drugCode;
+	
+	private String drugName;
 
 	
 	private String mappingBrand;
@@ -105,6 +107,14 @@ public class WDrugMappingUI implements Serializable {
 
 	public void setMappingPrice(BigDecimal mappingPrice) {
 		this.mappingPrice = mappingPrice;
+	}
+
+	public String getDrugName() {
+		return drugName;
+	}
+
+	public void setDrugName(String drugName) {
+		this.drugName = drugName;
 	}
 
 }
