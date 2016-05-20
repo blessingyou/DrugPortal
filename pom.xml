@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.version</groupId>
 	<artifactId>drug</artifactId>
-	<name>mvc</name>
+	<name>DrugPortal</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
