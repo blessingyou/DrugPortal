@@ -19,7 +19,7 @@ public class WSystemMessage implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 
-	
+	@Column(name="LAST_UPDATE_DATE")
 	private Timestamp lastUpdateDate;
 
 	@Column(name="LAST_UPDATE_USER")

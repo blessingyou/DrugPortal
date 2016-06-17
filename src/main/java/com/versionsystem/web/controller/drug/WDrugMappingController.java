@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.versionsystem.common.ApplicationError;
+import com.versionsystem.common.ApplicationException;
 import com.versionsystem.service.impl.drug.WDrugMappingService;
 import com.versionsystem.web.model.drug.WDrugMappingUI;
 
@@ -45,8 +48,13 @@ public class WDrugMappingController {
     
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public  WDrugMappingUI update(@RequestBody WDrugMappingUI WDrugMappingUI) throws Exception {
+    	try{
     	this.drugMappingService.update(WDrugMappingUI);
         return WDrugMappingUI;
+    	}catch(Exception e){
+    		logger.info("update mapping:", e);
+    		return null;
+    	}
     }
     
     @RequestMapping(value = "/destroy", method = RequestMethod.POST)
