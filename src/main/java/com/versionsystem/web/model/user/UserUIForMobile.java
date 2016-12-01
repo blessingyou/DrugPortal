@@ -18,9 +18,20 @@ public class UserUIForMobile {
 	private String mobileDeviceId;
 	private String mobileDeviceType;
 	private String email;
+	private String state;
 
 
 	public UserUIForMobile() {
+	}
+
+
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 

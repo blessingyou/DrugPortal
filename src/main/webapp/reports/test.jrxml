@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="test"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="595"
+		 pageHeight="255"
+		 columnWidth="593"
+		 columnSpacing="0"
+		 leftMargin="1"
+		 rightMargin="1"
+		 topMargin="1"
+		 bottomMargin="1"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<style 
+		name="chinesefont"
+		isDefault="false"
+		fontSize="8"
+		pdfFontName="STSong-Light"
+		pdfEncoding="UniGB-UCS2-H"
+		isPdfEmbedded="true"
+	>
+	</style>
+	<style 
+		name="englishfont"
+		isDefault="true"
+		fontName="Times New Roman"
+		fontSize="8"
+		pdfFontName="Times-Roman"
+		pdfEncoding="Cp1252"
+		isPdfEmbedded="true"
+	>
+	</style>
+
+	<parameter name="SUBREPORT_DIR" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+
+	<field name="barCodeImage" class="java.awt.Image">
+		<fieldDescription><![CDATA[barCodeImage]]></fieldDescription>
+	</field>
+	<field name="barcodeFile" class="java.lang.String">
+		<fieldDescription><![CDATA[barcodeFile]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="diagnosis" class="java.lang.String">
+		<fieldDescription><![CDATA[diagnosis]]></fieldDescription>
+	</field>
+	<field name="doctorName" class="java.lang.String">
+		<fieldDescription><![CDATA[doctorName]]></fieldDescription>
+	</field>
+	<field name="doctorNo" class="java.lang.String">
+		<fieldDescription><![CDATA[doctorNo]]></fieldDescription>
+	</field>
+	<field name="inCurredDate" class="java.util.Date">
+		<fieldDescription><![CDATA[inCurredDate]]></fieldDescription>
+	</field>
+	<field name="items" class="java.util.ArrayList">
+		<fieldDescription><![CDATA[items]]></fieldDescription>
+	</field>
+	<field name="leaveFrom" class="java.util.Date">
+		<fieldDescription><![CDATA[leaveFrom]]></fieldDescription>
+	</field>
+	<field name="leaveTo" class="java.util.Date">
+		<fieldDescription><![CDATA[leaveTo]]></fieldDescription>
+	</field>
+	<field name="logo1" class="java.awt.Image">
+		<fieldDescription><![CDATA[logo1]]></fieldDescription>
+	</field>
+	<field name="logo2" class="java.awt.Image">
+		<fieldDescription><![CDATA[logo2]]></fieldDescription>
+	</field>
+	<field name="memberName" class="java.lang.String">
+		<fieldDescription><![CDATA[memberName]]></fieldDescription>
+	</field>
+	<field name="membershipNo" class="java.lang.String">
+		<fieldDescription><![CDATA[membershipNo]]></fieldDescription>
+	</field>
+	<field name="seqNo" class="java.lang.String">
+		<fieldDescription><![CDATA[seqNo]]></fieldDescription>
+	</field>
+	<field name="sickLeave" class="java.lang.Long">
+		<fieldDescription><![CDATA[sickLeave]]></fieldDescription>
+	</field>
+	<field name="signatureImage" class="java.awt.Image">
+		<fieldDescription><![CDATA[signatureImage]]></fieldDescription>
+	</field>
+	<field name="signatureImageForDr" class="java.awt.Image">
+		<fieldDescription><![CDATA[signatureImageForDr]]></fieldDescription>
+	</field>
+	<field name="voucherNo" class="java.lang.String">
+		<fieldDescription><![CDATA[voucherNo]]></fieldDescription>
+	</field>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="250"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="296"
+						y="107"
+						width="295"
+						height="25"
+						key="subreport-2"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{items})]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "test_subreport1.jasper"]]></subreportExpression>
+				</subreport>
+				<image  isLazy="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="4"
+						y="105"
+						width="38"
+						height="137"
+						key="image-1"/>
+					<box></box>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.awt.Image"><![CDATA[$F{logo2}]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="45"
+						y="209"
+						width="44"
+						height="22"
+						key="staticText-1"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Patient's
+Signature
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="45"
+						y="230"
+						width="43"
+						height="13"
+						key="staticText-2"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[病人簽署]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="172"
+						y="210"
+						width="47"
+						height="22"
+						key="staticText-3"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Doctor's
+Signature
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="172"
+						y="231"
+						width="47"
+						height="13"
+						key="staticText-4"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[醫生簽署]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="413"
+						y="95"
+						width="36"
+						height="12"
+						key="staticText-5"/>
+					<box></box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[Charges]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="449"
+						y="95"
+						width="20"
+						height="12"
+						key="staticText-6"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[收費]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement
+						style="chinesefont"
+						mode="Transparent"
+						x="297"
+						y="94"
+						width="293"
+						height="12"
+						backcolor="#CCCCCC"
+						key="rectangle-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="chinesefont"
+						x="88"
+						y="209"
+						width="83"
+						height="34"
+						key="image-2"/>
+					<box></box>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[]]></imageExpression>
+				</image>
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="chinesefont"
+						x="218"
+						y="209"
+						width="76"
+						height="34"
+						key="image-3"/>
+					<box></box>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.awt.Image"><![CDATA[$F{signatureImage}]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="45"
+						y="143"
+						width="249"
+						height="61"
+						key="staticText-7"/>
+					<box leftPadding="2" rightPadding="2"></box>
+					<textElement textAlignment="Left">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[本人授權任何為我檢查或治療的醫生，醫院診所，化驗所，掃瞄診斷中心或其化組織， 將本人之詳細資料，包括病歷及報告，程交韋予力醫務所 / 康健醫療網絡有限公司或任何有關的醫療計劃承保人或管理人，以作醫療計劃索償或管理之用。我也同意承擔任何超額或不受此計劃保障之費用。 此授權書之副本與正本具同等效力。]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="46"
+						y="4"
+						width="83"
+						height="14"
+						key="staticText-8"/>
+					<box></box>
+					<textElement>
+						<font size="9" isBold="false"/>
+					</textElement>
+				<text><![CDATA[Member's Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="46"
+						y="18"
+						width="83"
+						height="14"
+						key="staticText-9"/>
+					<box></box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+				<text><![CDATA[Membership No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="46"
+						y="32"
+						width="83"
+						height="14"
+						key="staticText-10"/>
+					<box></box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+				<text><![CDATA[Doctor's Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="46"
+						y="46"
+						width="83"
+						height="14"
+						key="staticText-11"/>
+					<box></box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+				<text><![CDATA[Doctor No.]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="129"
+						y="4"
+						width="168"
+						height="14"
+						forecolor="#0000FF"
+						key="textField-1"/>
+					<box></box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{memberName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="129"
+						y="18"
+						width="168"
+						height="14"
+						forecolor="#0000FF"
+						key="textField-2"/>
+					<box></box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{membershipNo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="129"
+						y="32"
+						width="168"
+						height="14"
+						forecolor="#0000FF"
+						key="textField-3"/>
+					<box></box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{doctorName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="129"
+						y="46"
+						width="168"
+						height="14"
+						forecolor="#0000FF"
+						key="textField-4"/>
+					<box></box>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{doctorNo}]]></textFieldExpression>
+				</textField>
+				<image  scaleImage="RetainShape" vAlign="Top" isLazy="true" isUsingCache="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="4"
+						y="3"
+						width="38"
+						height="78"
+						key="image-4"/>
+					<box></box>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.awt.Image"><![CDATA[$F{logo1}]]></imageExpression>
+				</image>
+				<textField isStretchWithOverflow="false" pattern="yyyy/MM/dd" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="534"
+						y="32"
+						width="53"
+						height="12"
+						forecolor="#0000FF"
+						key="textField-5"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{leaveTo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="299"
+						y="59"
+						width="290"
+						height="36"
+						forecolor="#0000FF"
+						key="textField-6"
+						stretchType="RelativeToBandHeight"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{diagnosis}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="334"
+						y="44"
+						width="20"
+						height="12"
+						key="staticText-12"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[診斷]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="299"
+						y="20"
+						width="60"
+						height="12"
+						key="staticText-13"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Incurred Date]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="yyyy/MM/dd" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="388"
+						y="20"
+						width="51"
+						height="12"
+						forecolor="#0000FF"
+						key="textField-7"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{inCurredDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="415"
+						y="32"
+						width="22"
+						height="12"
+						key="staticText-14"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[From]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="348"
+						y="20"
+						width="38"
+						height="12"
+						key="staticText-15"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[診治日期 ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="362"
+						y="32"
+						width="18"
+						height="12"
+						forecolor="#0000FF"
+						key="textField-8"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Long"><![CDATA[$F{sickLeave}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="505"
+						y="32"
+						width="22"
+						height="12"
+						key="staticText-16"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[From]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="299"
+						y="4"
+						width="100"
+						height="17"
+						forecolor="#3333FF"
+						key="textField-9"/>
+					<box></box>
+					<textElement textAlignment="Center">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{voucherNo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="338"
+						y="32"
+						width="20"
+						height="12"
+						key="staticText-17"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[病假]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="399"
+						y="32"
+						width="10"
+						height="12"
+						key="staticText-18"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[天]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="299"
+						y="44"
+						width="46"
+						height="12"
+						key="staticText-19"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Diagnosis]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="yyyy/MM/dd" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="444"
+						y="32"
+						width="60"
+						height="12"
+						forecolor="#0000FF"
+						key="textField-10"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{leaveFrom}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="299"
+						y="32"
+						width="45"
+						height="12"
+						key="staticText-20"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Sick Leave]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="433"
+						y="32"
+						width="10"
+						height="12"
+						key="staticText-21"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[由]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="385"
+						y="32"
+						width="15"
+						height="12"
+						key="staticText-22"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[days]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						x="45"
+						y="62"
+						width="249"
+						height="81"
+						key="staticText-23"/>
+					<box leftPadding="2" rightPadding="2"></box>
+					<textElement textAlignment="Left">
+						<font size="8" isBold="false" isPdfEmbedded ="true"/>
+					</textElement>
+				<text><![CDATA[I hereby authorize any doctor, hospital, clinic, laboratory imaging centre or other organization where I have been examined or treated, to give full details thereof including medical history & report to Dr. Vio & Partners/ Town Health Medical Network Services Ltd, or any relevant medical scheme insurers or administrators for the purpose of medical scheme claims or administration. I also agree to settle any charges incurred that are not covered by the scheme.A copy of this authorization shall be as valid as the original.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						x="523"
+						y="32"
+						width="10"
+						height="12"
+						key="staticText-24"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[至]]></text>
+				</staticText>
+				<image  scaleImage="RetainShape" vAlign="Top" hAlign="Left" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="442"
+						y="6"
+						width="142"
+						height="23"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="barcode-1"/>
+					<box></box>
+					<graphicElement stretchType="NoStretch" fill="Solid" />
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(9,$F{voucherNo},false,false,null,0,0)]]></imageExpression>
+				</image>
+				<rectangle>
+					<reportElement
+						style="englishfont"
+						mode="Transparent"
+						x="43"
+						y="4"
+						width="547"
+						height="240"
+						key="rectangle-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<line direction="TopDown">
+					<reportElement
+						style="englishfont"
+						x="296"
+						y="4"
+						width="0"
+						height="239"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>
