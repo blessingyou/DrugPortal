@@ -14,24 +14,14 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileUpload;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,6 +41,10 @@ import com.versionsystem.service.impl.UserService;
 import com.versionsystem.service.repo.UserRepository;
 import com.versionsystem.web.model.user.UserUIForMobile;
 
+import magick.ImageInfo;
+import magick.MagickException;
+import magick.MagickImage;
+import magick.PixelPacket;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRRuntimeException;
@@ -91,13 +85,14 @@ public class AndroidUploadController {
 			String sign = request.getParameter("sign");
 			String nativePic = request.getParameter("nativepic");
 			String takePic = request.getParameter("takepic");
+			String userName=request.getParameter("username");
 			
 			String uploadPath = proPath + "resources/images/" + barcode + "/";
 			
 			if(sign != null) {
 				uploadPath = proPath + "resources/images/sign/" + barcode + "/";
 				DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");  
-				String fileName = df.format(new Date()) + ".png";
+				String fileName = df.format(new Date()) + ".jpg";
 				
 				fileUpload(sign, uploadPath, fileName);
 				map.put("sign", "http://"+ IP + proName +"/resources/images/sign/" + barcode + "/" + fileName);
@@ -106,18 +101,21 @@ public class AndroidUploadController {
 			map.put("nativepic", "http://"+ IP + proName + "/resources/androidPic/voucher.png");
 			if(nativePic != null) {
 				DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");  
-	    		String fileName = df.format(new Date()) + ".png";
+	    		String fileName = df.format(new Date()) + ".jpg";
 				fileUpload(nativePic, uploadPath, fileName);
 	            
 				map.put("nativepic", "http://"+ IP + proName +"/resources/images/" + barcode + "/" + fileName);
 			}
 			if(takePic != null) {
 				DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");  
-	    		String fileName = df.format(new Date()) + ".png";
+	    		String fileName = df.format(new Date()) + ".jpg";
 				fileUpload(takePic, uploadPath, fileName);
 				
 				map.put("takepic", "http://"+ IP + proName +"/resources/images/" + barcode + "/" + fileName);
 			}
+			
+			String pngName=this.genPdfAndPng(request, response, barcode,"",userName);
+			map.put("nativepic", "http://"+ IP + proName + "/resources/androidPic/"+pngName);
 		
 		} catch(FileNotFoundException e) {
 			e.printStackTrace();
@@ -151,7 +149,7 @@ public class AndroidUploadController {
 			String proName = request.getContextPath();
 			InputStream in = request.getInputStream();
 			String barcode ="",userName = "";
-			String exp = "";
+			String exp = ".jpg";
 //			ImageInputStream iis = ImageIO.createImageInputStream(in);
 //			Iterator<ImageReader> iterator = ImageIO.getImageReaders(iis);
 //			
@@ -171,6 +169,8 @@ public class AndroidUploadController {
     		String fileName = df.format(new Date()) + exp ;
     		String uploadPath = proPath + "resources/"+userName;
     		picUpload(request.getInputStream(), fileName, uploadPath);
+    		//ImageService.pngToJpg(uploadPath + "/" + fileName, uploadPath + "/"+df.format(new Date())+".jpg");
+    		this.genPdfAndPng(request, response, "", fileName,userName);
     		map.put("nativepic", "http://"+ IP+ proName + "/resources/androidPic/voucher.png");
     		
 		}catch (IOException e) {
@@ -259,7 +259,7 @@ public class AndroidUploadController {
 	         
 	        //file=new File("c:/software/tomcat8/webapps/DrugPortal/resources/androidPic/voucher.pdf");  
 			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportFile.getPath());
-			dataSource = this.createDataSource("",reportpath+"/");
+			dataSource = this.createDataSource("",reportpath+"/","20161205130627","123456");
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 			response.setContentType("application/pdf");
 			JRPdfExporter exporter = new JRPdfExporter();			
@@ -323,7 +323,7 @@ public class AndroidUploadController {
 	         
 	        file=new File(webroot+"/resources/androidPic/voucher.pdf");  
 			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportFile.getPath());
-			dataSource = this.createDataSource("",reportpath+"/");
+			dataSource = this.createDataSource("",reportpath+"/","20161205130627.jpg","123456");
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 			response.setContentType("application/pdf");
             JRPdfExporter exporter = new JRPdfExporter();	
@@ -362,13 +362,89 @@ public class AndroidUploadController {
          return "test";
 	
 	}
-	private JRDataSource createDataSource(String seqNo,String path) throws Exception {
+	private String genPdfAndPng(HttpServletRequest request,HttpServletResponse response,String barCode,String signatueFile,String user) throws UnsupportedEncodingException {
+		
+		ServletContext context = request.getSession().getServletContext();
+		String reportFileName = context.getRealPath("/reports/test.jasper");
+
+        File reportFile = new File(reportFileName);
+        if (!reportFile.exists()) {
+            throw new JRRuntimeException("File PdfEncryptReport.jasper not found. The report design must be compiled first.");
+        }
+                   
+       
+
+        Map parameters = new HashMap();
+
+		//window path
+        //parameters.put("SUBREPORT_DIR", reportFile.getParentFile().getAbsolutePath()+"\\");
+        //linux path
+        String reportpath = reportFile.getParentFile().getAbsolutePath();
+        
+        reportpath=reportpath.replaceAll("\\\\", "/");
+        String webroot=reportpath.substring(0, reportpath.lastIndexOf("reports"));
+        System.out.println("webroot path:"+webroot);
+        parameters.put("SUBREPORT_DIR", reportpath+"/");
+
+         JRDataSource dataSource;
+         ByteArrayOutputStream outPut=new ByteArrayOutputStream();  
+         File file=null;
+         FileOutputStream outputStream=null; 
+		try {
+			
+	         
+	        file=new File(webroot+"/resources/androidPic/voucher.pdf");  
+			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportFile.getPath());
+			dataSource = this.createDataSource("",reportpath+"/",signatueFile,user);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+			response.setContentType("application/pdf");
+            JRPdfExporter exporter = new JRPdfExporter();	
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);  
+            //生成输出流  
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outPut);  
+            //exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, file);
+            //屏蔽copy功能  
+            exporter.setParameter(JRPdfExporterParameter.IS_ENCRYPTED,Boolean.TRUE);  
+            //加密  
+            //exporter.setParameter(JRPdfExporterParameter.IS_128_BIT_KEY,Boolean.TRUE);  
+            exporter.exportReport();  
+            outputStream=new FileOutputStream(file);  
+            outputStream.write(outPut.toByteArray());  
+            //System.out.println("java.library.path is: " + System.getProperty("java.library.path"));
+            
+				
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{  
+            try {  
+                outPut.flush();  
+                outPut.close();  
+                if(outputStream!=null){
+                	outputStream.flush();
+                	outputStream.close();
+                }
+                ImageService.pdfToPng(webroot+"/resources/androidPic/voucher.pdf", webroot+"/resources/androidPic/voucher.png");
+            } catch (Exception e) {  
+                e.printStackTrace();  
+            }  
+        }  
+
+        
+         return "voucher.png";
+	
+	}
+	private JRDataSource createDataSource(String seqNo,String path,String signatureFile,String user) throws Exception {
 		//生成测试数据
 		System.out.println("path="+path);
+		String webroot=path.substring(0, path.lastIndexOf("reports"));
 		ImageService is=new ImageService();
         Image barcodeImage = null, signatureImage = null,logo1=null,logo2=null;
       
-        signatureImage=is.getImage(path+"vio_logo_vertical.jpg");
+        if(signatureFile!=null && !"".equals(signatureFile)){
+        //	signatureImage=is.getImage(webroot+"resources/"+user+"/"+signatureFile);
+        }
+        signatureImage=is.getPngImage(path+"20161205175259.jpg");
         logo1=is.getImage(path+"THMN_logo_vertical.jpg");
         logo2=is.getImage(path+"vio_logo_vertical.jpg");
         ArrayList<VoucherVO> l = new ArrayList<VoucherVO>();
@@ -450,6 +526,23 @@ public class AndroidUploadController {
 	    }  
 	    in.close();  
 	    out.close();  
+	    
+	   /*
+	    try {
+	    	ImageInfo origInfo = new ImageInfo(uploadFolder + "/" + filename);
+			MagickImage image = new MagickImage(origInfo); //load image
+		
+			//boolean flag = image.transparentImage(PixelPacket.queryColorDatabase("white"),65535);
+			//System.out.println(flag);
+			//image.setFileName(absNewFilePath); //give new location
+			image.writeImage(origInfo); //save
+			
+		      
+		} catch (MagickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //load image info
+	    */
 	} 
 
 }
