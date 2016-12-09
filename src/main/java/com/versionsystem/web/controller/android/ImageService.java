@@ -6,9 +6,14 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+
+import org.springframework.core.convert.converter.ConvertingComparator;
 
 import magick.ImageInfo;
 import magick.MagickException;
@@ -43,30 +48,36 @@ public class ImageService {
 	        
 	       
 	    }catch(Exception e) {  
-	        //e.printStackTrace();  
+	        e.printStackTrace();  	    	
 	    	System.out.println(e.getMessage());
 	    }
 	    return image;
 	    
 	}
 	public static void pngToJpg(String inputfileName,String outputfile){
-		 //Read input PNG image 
-	      //String inputfileName = "input_png.png"; 
-	      //Read image into ImageInfo object
+		java.lang.Runtime rt = java.lang.Runtime.getRuntime();
 		try {
-			ImageInfo info = new ImageInfo(inputfileName); 
-		      //Create MagickImage that converts format
-		      MagickImage magick_converter = new MagickImage(info); 
-		      //Specify output file name
-		      //String outputfile = "jmagick_png2jpg.jpg"; 
-		      //Set output format
-		      magick_converter.setBackgroundColor(PixelPacket.queryColorDatabase("white"));
-		      magick_converter.setFileName(outputfile);
-		      //Write JPG file
-		      magick_converter.writeImage(info);
+			String command=" convert "+inputfileName+" -background white -flatten "+outputfile;
+			//+";convert "+outputfile+" -trim "+outputfile
+			java.lang.Process proc = rt.exec(command);
+			StreamConsumer errorConsumer = new StreamConsumer (proc.getErrorStream(), "error");            
+	             
+	        // any output?
+	        StreamConsumer outputConsumer = new StreamConsumer (proc.getInputStream(), "output");
+	                 
+	            // kick them off
+	            errorConsumer.start ();
+	            outputConsumer.start ();
+	                                     
+	            // any error???
+	            int exitVal = proc.waitFor ();
+	            System.out.println ("ExitValue: " + exitVal);        			
+			
 		} catch (Exception e) {
-			// TODO: handle exception
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			
 		}
 	      
 	}
@@ -92,13 +103,13 @@ public class ImageService {
 	public static void main(String[] args) {
 		ImageInfo origInfo;
 		try {
-			origInfo = new ImageInfo("/home/yonghong/Documents/images/20161201154022.jpg");
-			MagickImage image = new MagickImage(origInfo); //load image
+			//origInfo = new ImageInfo("/home/yonghong/Documents/images/20161201154022.jpg");
+			//MagickImage image = new MagickImage(origInfo); //load image
 		
-			boolean flag = image.transparentImage(PixelPacket.queryColorDatabase("white"),65535);
-			System.out.println(flag);
+			//boolean flag = image.transparentImage(PixelPacket.queryColorDatabase("white"),65535);
+			//System.out.println(flag);
 			//image.setFileName(absNewFilePath); //give new location
-			image.writeImage(origInfo); //save
+			//image.writeImage(origInfo); //save
 			/*
 			
 			String fileName = "/home/yonghong/Documents/images/voucher1.pdf";
@@ -116,13 +127,16 @@ public class ImageService {
 		      
 		      */
 		      String source1 = "/home/yonghong/Documents/images/voucher1.png";
-		      ImageInfo image1 = new ImageInfo(source1);	      		  
+		      ImageInfo image1 = new ImageInfo(source1);	
+   		  
 		      MagickImage mainImage1 = new MagickImage(image1);
 		      String source2 = "/home/yonghong/Documents/images/signature1.png";
 		      ImageInfo image2 = new ImageInfo(source1);	      		  
 		      MagickImage mainImage2 = new MagickImage(image2);
 		      
-		      mainImage1.compositeImage(0, mainImage2, 100, 200);
+		      //mainImage1.compositeImage(0, mainImage2, 100, 200);
+		      ImageService.pngToJpg("/home/yonghong/Documents/images/testpng.png", "/home/yonghong/Documents/images/testjpg2.jpg");
+		      
 		      
 		      
 		} catch (MagickException e) {

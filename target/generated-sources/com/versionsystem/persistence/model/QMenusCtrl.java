@@ -46,6 +46,8 @@ public class QMenusCtrl extends EntityPathBase<MenusCtrl> {
 
     public final StringPath menuName = createString("menuName");
 
+    public final ListPath<MenusCtrlAccess, QMenusCtrlAccess> menusCtrlAccesses = this.<MenusCtrlAccess, QMenusCtrlAccess>createList("menusCtrlAccesses", MenusCtrlAccess.class, QMenusCtrlAccess.class, PathInits.DIRECT2);
+
     public final ListPath<MenusCtrlLocale, QMenusCtrlLocale> menusCtrlLocales = this.<MenusCtrlLocale, QMenusCtrlLocale>createList("menusCtrlLocales", MenusCtrlLocale.class, QMenusCtrlLocale.class, PathInits.DIRECT2);
 
     public final StringPath seqNo = createString("seqNo");

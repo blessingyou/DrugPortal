@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.versionsystem.common.ApplicationParas;
 import com.versionsystem.common.ServiceMd5;
+import com.versionsystem.persistence.model.UserId;
 import com.versionsystem.service.ConfigService;
 import com.versionsystem.service.impl.UserService;
 import com.versionsystem.service.impl.notification.PushMessageService;
-import com.versionsystem.service.security.GoogleAuthenticatorService;
+import com.versionsystem.web.model.user.UserUI;
 import com.versionsystem.web.model.user.UserUIForMobile;
 
 
@@ -29,8 +30,6 @@ public class MobileController {
 	private ConfigService configService;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private GoogleAuthenticatorService authService;
 	
 	
 	@Autowired
@@ -70,9 +69,22 @@ public class MobileController {
 		
 	}
 	
-	
-
-	
+	@RequestMapping(value="/genSecurityCode/{userId}")
+	public String genSecurityCode(@PathVariable String userId,HttpServletRequest request){
+		
+		if(this.userService.getUserByUserId(userId)==null)
+			return "InvalidUser";
+		else{
+			if(!this.userService.registerAvailable(userId)){
+				String code=this.pushMessageService.genSecurityCode(userId);
+				logger.info("gen a code:"+code);
+				return code;
+			}
+			else
+				return "Unregistered";
+		}
+		
+	}
 	@RequestMapping(value="/getCreateSecurityCodeTime",method=RequestMethod.POST)
 	public String getCreateSecurityCodeTime(@RequestParam("regIdUserId") String regIdUserId,HttpServletRequest request){
 		System.out.println("ID:"+regIdUserId);
@@ -86,8 +98,6 @@ public class MobileController {
 		return "";
 		
 	}
-	
-	
 	@RequestMapping(value="/checkSecurityCodeValid/{userId}/{securityCode}")
 	public String checkSecurityCodeValid(@PathVariable String userId,@PathVariable String securityCode,HttpServletRequest request){
 		String temp=configService.getProperty(ApplicationParas.APP_SECURITYCODE_DURATION);
@@ -123,31 +133,21 @@ public class MobileController {
 			return "N";
 	}
 	
-    
-	@RequestMapping(value="/genQrCode/{userId}")
-	public String genQrCode(@PathVariable String userId,HttpServletRequest request){
+	@RequestMapping(value="/getUser/{userId}", method= RequestMethod.GET)
+    public UserUI getUserById(@PathVariable String userId) throws Exception {
 		
-		if(this.userService.getUserByUserId(userId)==null)
-			return "InvalidUser";
-		else{
-			try {
-				String qrfile=authService.generateQrcodeForDevice(userId, "C:\\software\\tomcat8\\webapps\\DataCentre\\resources\\images\\"+userId+".png");
-				return qrfile;
-			} catch (Exception e) {
-				// TODO: handle exception
-				logger.error("Gen qrcode error",e);
-			}
-			return "failure";
-			
+		UserUI uservo=new UserUI();
+		UserId uid=this.userService.getUserByUserId(userId);
+		if(uid!=null){
+			uservo.setLocale(uid.getLocale());
 		}
-		
-	}
+		else
+			uservo.setLocale("zh-HK");
+		return uservo;
+    }
+
 	
-	@RequestMapping(value="/validateAuth",method=RequestMethod.POST)
-	public boolean validateAuth(@RequestParam("j_username") String userId,@RequestParam("j_securityCode") String code,HttpServletRequest request){
-		System.out.println("ID:"+userId+" code:"+code);
-		return this.authService.validateAuth(userId, Integer.parseInt(code));
-		
-	}
+    
+    
 
 }

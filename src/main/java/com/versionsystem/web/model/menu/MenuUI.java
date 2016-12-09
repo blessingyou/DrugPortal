@@ -20,7 +20,8 @@ public class MenuUI {
 	
 	private String cnText;
 	private String hkText;
-	private String allowedAction;
+	private String allowedAction;//applied only for edit & view
+	List<MenuAccessUI>  otherActions;
 	
 	
 	public String getAllowedAction() {
@@ -122,6 +123,13 @@ public class MenuUI {
 	}
 	public void setCls(String cls) {
 		this.cls = cls;
+	}
+	
+	public List<MenuAccessUI> getOtherActions() {
+		return otherActions;
+	}
+	public void setOtherActions(List<MenuAccessUI> otherActions) {
+		this.otherActions = otherActions;
 	}
 	@Override
 	public String toString() {

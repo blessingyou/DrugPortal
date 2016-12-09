@@ -12,7 +12,7 @@ import com.versionsystem.persistence.model.MenusCtrl;
 
 public interface MenusCtrlRepository extends JpaRepository<MenusCtrl, Long>,QueryDslPredicateExecutor<MenusCtrl> {
 
-	MenusCtrl findById(String id);
+	//MenusCtrl findById(String id);
 	List<MenusCtrl> findBySeqNoStartingWith(String seqNo);
 	List<MenusCtrl> findBySeqNoAndSysRole(String seqNo,String sysRole);
 	List<MenusCtrl> findBySysRoleOrderByDispalySeqNoAsc(String sysRole);

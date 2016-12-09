@@ -1,11 +1,10 @@
-
+﻿
 <!DOCTYPE html>
 <html>
 <head>
 
 <meta http-equiv="Pragma" content="no-cache"> 
 <meta http-equiv="Cache-Control" content="no-cache"> 
-<meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     
     <style>
@@ -31,7 +30,7 @@ body{
 .after{text-align:right;padding-right:20px;font-size:0.75em;}
 </style>
 
-    <title>Cms System Entry</title>
+    <title>Booking System Entry</title>
     <link rel="stylesheet" href="resources/styles/kendo.common.min.css" />
 
     <link rel="stylesheet" href="resources/styles/kendo.common-bootstrap.min.css">

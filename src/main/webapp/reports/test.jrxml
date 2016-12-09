@@ -16,7 +16,8 @@
 		 bottomMargin="1"
 		 whenNoDataType="NoPages"
 		 isTitleNewPage="false"
-		 isSummaryNewPage="false">
+		 isSummaryNewPage="false"
+		 isIgnorePagination="true">
 	<property name="ireport.scriptlethandling" value="0" />
 	<property name="ireport.encoding" value="UTF-8" />
 	<import value="java.util.*" />
@@ -128,7 +129,7 @@
 						x="296"
 						y="107"
 						width="295"
-						height="25"
+						height="135"
 						key="subreport-2"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{items})]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "test_subreport1.jasper"]]></subreportExpression>
@@ -247,6 +248,7 @@ Signature
 				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="chinesefont"
+						mode="Transparent"
 						x="88"
 						y="209"
 						width="83"
@@ -254,11 +256,12 @@ Signature
 						key="image-2"/>
 					<box></box>
 					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA[]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[$F{signatureImage}]]></imageExpression>
 				</image>
 				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						style="chinesefont"
+						mode="Transparent"
 						x="218"
 						y="209"
 						width="76"
@@ -700,8 +703,8 @@ Signature
 					<reportElement
 						style="englishfont"
 						mode="Transparent"
-						x="43"
-						y="4"
+						x="44"
+						y="3"
 						width="547"
 						height="240"
 						key="rectangle-2"/>

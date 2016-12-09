@@ -31,6 +31,7 @@ import com.versionsystem.common.FilterRequest;
 import com.versionsystem.common.ResponseMap;
 import com.versionsystem.persistence.model.LastestMenuList;
 import com.versionsystem.persistence.model.MenusCtrl;
+import com.versionsystem.persistence.model.MenusCtrlAccess;
 import com.versionsystem.persistence.model.MenusCtrlLocale;
 //import com.versionsystem.persistence.model.QMenusCtrl;
 //import com.versionsystem.persistence.model.QUserId;
@@ -38,9 +39,11 @@ import com.versionsystem.persistence.model.UserId;
 import com.versionsystem.service.impl.UserService;
 import com.versionsystem.service.repo.UserRepository;
 import com.versionsystem.service.repo.menu.LastestMenuListRepository;
+import com.versionsystem.service.repo.menu.MenusCtrlAccessRepository;
 import com.versionsystem.service.repo.menu.MenusCtrlLocaleRepository;
 import com.versionsystem.service.repo.menu.MenusCtrlRepository;
 import com.versionsystem.web.model.menu.LastestMenuListUI;
+import com.versionsystem.web.model.menu.MenuAccessUI;
 import com.versionsystem.web.model.menu.MenuUI;
 import com.versionsystem.web.model.role.RoleUI;
 
@@ -56,6 +59,8 @@ public class MenuService {
 	private LastestMenuListRepository lastmenuRepository;
 	@Autowired
 	private MenusCtrlLocaleRepository localeRepository;
+	@Autowired
+	private MenusCtrlAccessRepository accessRepository;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -127,25 +132,69 @@ public class MenuService {
 				vo.setAccessLock(o.getAccessLock());
 				vo.setAllowedAction(o.getAllowedAction());
 				vo.setChecked(true);
+				if(o.getMenusCtrlAccesses()!=null && o.getMenusCtrlAccesses().size()>0){
+					vo.setOtherActions(new ArrayList<MenuAccessUI>());
+					MenuAccessUI mui=null;
+					for(MenusCtrlAccess mca:o.getMenusCtrlAccesses()){
+						mui = new MenuAccessUI();
+						mui.setParameterKey(mca.getParameterKey());
+						mui.setParameterValue(mca.getParameterValue());
+						vo.getOtherActions().add(mui);
+					}
+				}
 				//get Admin menuId
 				List<MenusCtrl> templist=this.repository.findBySeqNoAndSysRole(o.getSeqNo(),"ADMIN");
 				if(templist.size()>0)
 					vo.setText(this.localeRepository.findByMenusCtrlIdAndLocale(templist.get(0).getId(), locale).getFormLabel());
+				
+				if(vo.getItems()==null)
+					vo.setItems(new ArrayList<MenuUI>());
 				boolean existed=false;
 				for(MenuUI temp:rl) {
 					
-					if(temp.isHasChildren() && vo.getSeqNo().substring(0, 2).equals(temp.getSeqNo()) && !vo.isHasChildren()) {
-						//vo.setId(temp.getId()+"/"+String.valueOf(o.getId()));
-						
-						temp.getItems().add(vo);
-						
-						existed=true;
-						break;
+					if(vo.getSeqNo().length()==4){
+						if( vo.getSeqNo().substring(0, 2).equals(temp.getSeqNo()) ) {
+							//vo.setId(temp.getId()+"/"+String.valueOf(o.getId()));
+							
+							temp.getItems().add(vo);
+							
+							existed=true;
+							break;
+						}
+					}
+					else if(vo.getSeqNo().length()==6){
+						if( vo.getSeqNo().substring(0, 2).equals(temp.getSeqNo())) {
+							//vo.setId(temp.getId()+"/"+String.valueOf(o.getId()));
+							for(MenuUI sub:temp.getItems()){
+								if(vo.getSeqNo().substring(0, 4).equals(sub.getSeqNo())){
+									sub.getItems().add(vo);
+									existed=true;
+									break;
+								}
+							}						
+							
+						}
+					}
+					else if(vo.getSeqNo().length()==8){
+						if( vo.getSeqNo().substring(0, 2).equals(temp.getSeqNo())) {
+							//vo.setId(temp.getId()+"/"+String.valueOf(o.getId()));
+							for(MenuUI sub:temp.getItems()){
+								if(vo.getSeqNo().substring(0, 4).equals(sub.getSeqNo())){
+									for(MenuUI sub2:sub.getItems()){
+										if(vo.getSeqNo().substring(0, 6).equals(sub2.getSeqNo())){
+											sub2.getItems().add(vo);
+											existed=true;
+											break;
+										}
+									}		
+								}
+							}						
+							
+						}
 					}
 				}
 				if(!existed) {
-					if(vo.isHasChildren() && vo.getItems()==null)
-						vo.setItems(new ArrayList<MenuUI>());
+					
 					rl.add(vo);
 				}
 			}
@@ -170,6 +219,17 @@ public class MenuService {
 				vo.setWidget(o.getMenuName());
 				vo.setAccessLock(o.getAccessLock());
 				
+				if(o.getMenusCtrlAccesses()!=null && o.getMenusCtrlAccesses().size()>0){
+					vo.setOtherActions(new ArrayList<MenuAccessUI>());
+					MenuAccessUI mui=null;
+					for(MenusCtrlAccess mca:o.getMenusCtrlAccesses()){
+						mui = new MenuAccessUI();
+						mui.setParameterKey(mca.getParameterKey());
+						mui.setParameterValue(mca.getParameterValue());
+						vo.getOtherActions().add(mui);
+					}
+				}
+				
 				
 				for(MenusCtrl temp:l2){
 					if(temp.getSeqNo().equals(vo.getSeqNo())){
@@ -189,22 +249,53 @@ public class MenuService {
 					if(vo.isChecked() && !vo.isHasChildren())
 						vo.setText(vo.getText()+"--["+(vo.getAllowedAction().equals("Y")?"Edit":"View")+"]");
 				}
-				
+				if(vo.getItems()==null)
+					vo.setItems(new ArrayList<MenuUI>());
 				boolean existed=false;
 				for(MenuUI temp:rl) {
 					
-					if(temp.isHasChildren() && vo.getSeqNo().substring(0, 2).equals(temp.getSeqNo()) && !vo.isHasChildren()) {
-						//vo.setId(temp.getId()+"/"+String.valueOf(o.getId()));
-						
-						temp.getItems().add(vo);
-						
-						existed=true;
-						break;
+					if(vo.getSeqNo().length()==4){
+						if( vo.getSeqNo().substring(0, 2).equals(temp.getSeqNo()) ) {
+							//vo.setId(temp.getId()+"/"+String.valueOf(o.getId()));
+							
+							temp.getItems().add(vo);
+							
+							existed=true;
+							break;
+						}
+					}
+					else if(vo.getSeqNo().length()==6){
+						if( vo.getSeqNo().substring(0, 2).equals(temp.getSeqNo())) {
+							//vo.setId(temp.getId()+"/"+String.valueOf(o.getId()));
+							for(MenuUI sub:temp.getItems()){
+								if(vo.getSeqNo().substring(0, 4).equals(sub.getSeqNo())){
+									sub.getItems().add(vo);
+									existed=true;
+									break;
+								}
+							}						
+							
+						}
+					}
+					else if(vo.getSeqNo().length()==8){
+						if( vo.getSeqNo().substring(0, 2).equals(temp.getSeqNo())) {
+							//vo.setId(temp.getId()+"/"+String.valueOf(o.getId()));
+							for(MenuUI sub:temp.getItems()){
+								if(vo.getSeqNo().substring(0, 4).equals(sub.getSeqNo())){
+									for(MenuUI sub2:sub.getItems()){
+										if(vo.getSeqNo().substring(0, 6).equals(sub2.getSeqNo())){
+											sub2.getItems().add(vo);
+											existed=true;
+											break;
+										}
+									}		
+								}
+							}						
+							
+						}
 					}
 				}
 				if(!existed) {
-					if(vo.isHasChildren() && vo.getItems()==null)
-						vo.setItems(new ArrayList<MenuUI>());
 					rl.add(vo);
 				}
 			}
@@ -282,6 +373,12 @@ public class MenuService {
 				//System.out.println("delete:"+o.getMenuId());
 			}
 			lastmenuRepository.flush();
+			if(temp.getMenusCtrlAccesses()!=null){
+				for(MenusCtrlAccess mca:temp.getMenusCtrlAccesses()){
+					accessRepository.delete(mca);
+				}
+			}
+			accessRepository.flush();
 			this.repository.delete(temp);
 			logger.info("delete menu id="+temp.getId()+" role="+temp.getSysRole()+" seqNo="+temp.getSeqNo());;
 		}
@@ -404,6 +501,59 @@ public class MenuService {
 		
 		
 		return  vo;
+	}
+	
+	public List<MenuAccessUI> getMenuAccessesById(long id){
+		List<MenusCtrlAccess> l = this.accessRepository.findByMenusCtrlId(id);
+		List<MenuAccessUI> rl=new ArrayList<MenuAccessUI>();
+		MenuAccessUI vo=null;
+		MenusCtrl mc=this.repository.findOne(id);
+		if(mc!=null){
+			
+		}
+		boolean excel = false,edit=false;
+		for(MenusCtrlAccess o:l){
+			vo = new MenuAccessUI();
+			vo.setId(o.getId());
+			vo.setParameterKey(o.getParameterKey());
+			vo.setParameterValue(o.getParameterValue());
+			vo.setMenuId(o.getMenusCtrl().getId());
+			if("Y".equals(vo.getParameterKey()))
+				vo.setTicked(true);
+			else
+				vo.setTicked(false);
+			rl.add(vo);
+			if(o.getParameterKey().equals("ExportExcel")){
+				excel=true;
+			}
+			if(o.getParameterKey().equals("EditView")){
+				edit=true;
+			}
+		}
+		if(!edit){
+			vo = new MenuAccessUI();
+			vo.setParameterKey("EditView");
+			vo.setParameterValue("Y");
+			if("Y".equals(vo.getParameterKey()))
+				vo.setTicked(true);
+			else
+				vo.setTicked(false);
+			vo.setMenuId(id);
+			rl.add(vo);
+		}
+		if(!excel){
+			vo = new MenuAccessUI();
+			vo.setParameterKey("ExportExcel");
+			vo.setParameterValue("N");
+			vo.setMenuId(id);
+			if("Y".equals(vo.getParameterKey()))
+				vo.setTicked(true);
+			else
+				vo.setTicked(false);
+			rl.add(vo);
+		}
+		
+		return rl;
 	}
 	
 	

@@ -58,16 +58,15 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import sun.misc.BASE64Decoder;
 
-@RestController
-@RequestMapping(value="/android")
-public class AndroidUploadController {
+
+public class AndroidUploadController_backup {
 	
 	@Autowired
 	private UserRepository userRepository;
 	
 //	private String IP;
 	
-	@RequestMapping(value = "/sign/**", method = RequestMethod.POST)
+	//@RequestMapping(value = "/sign/**", method = RequestMethod.POST)
 	@ResponseBody
 	public String saveSign(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 		//@PathVariable String userName, 
@@ -89,7 +88,7 @@ public class AndroidUploadController {
 			String takePic = request.getParameter("takepic");
 			String userName=request.getParameter("username");
 			
-			
+			String uploadPath = proPath + "resources/images/" + barcode + "/";
 			String[] tags = tagname.split(",");
 			if(tags.length >= 2) {
 				barcode = tags[1];
@@ -98,7 +97,7 @@ public class AndroidUploadController {
 			}
 			
 			String pngName=this.genPdfAndPng(request, response, barcode,"",userName);
-			map.put("nativepic", "http://"+ IP + proName + "/resources/"+userName+"/"+pngName);
+			map.put("nativepic", "http://"+ IP + proName + "/resources/"+userName+"/"+barcode+"/"+pngName);
 		
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -108,7 +107,7 @@ public class AndroidUploadController {
 			
 	}
 	
-	@RequestMapping(value="/other/**", method = RequestMethod.POST)
+	//@RequestMapping(value="/other/**", method = RequestMethod.POST)
 	@ResponseBody
 	public String savePic(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 		//@PathVariable String barcode,
@@ -139,27 +138,19 @@ public class AndroidUploadController {
 				picFlag = tags[2];
 				
 			}
-			//**********reset barcode to "voucher"
-			
-			
-				barcode="voucher";
-			
-			
-			//**********************************
-			
 			DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 			filePrefix=df.format(new Date());
 			if("hand".equals(picFlag))
 				exp=".png";
 			
     		fileName = filePrefix + exp ;
-    		String uploadPath = proPath + "resources/"+userName +"/";
+    		String uploadPath = proPath + "resources/"+userName +"/"+ barcode + "/";
     		picUpload(request.getInputStream(), fileName, uploadPath);
     		if("hand".equals(picFlag)){
     			ImageService.pngToJpg(uploadPath + "/" + fileName, uploadPath + "/"+filePrefix+".jpg");
     			System.out.println("start gen pdf png...."+filePrefix+".jpg");
-        		String returnFile=this.genPdfAndPng(request, response, barcode,filePrefix+".jpg",userName);
-        		map.put("nativepic", "http://"+ IP+ proName + "/resources/"+userName + "/"+returnFile);
+        		this.genPdfAndPng(request, response, "",filePrefix+".jpg",userName);
+        		map.put("nativepic", "http://"+ IP+ proName + "/resources/"+userName +"/"+ barcode + "/"+barcode+"/"+".png");
     		}  			
     		
     		
@@ -171,7 +162,7 @@ public class AndroidUploadController {
 		return (String)map.get("nativepic");
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	//@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
 	public UserUIForMobile login(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 		
@@ -216,7 +207,7 @@ public class AndroidUploadController {
 		return userMobile;
 	}
 	
-	@RequestMapping(value = "/test2", method = RequestMethod.GET)
+	//@RequestMapping(value = "/test2", method = RequestMethod.GET)
 	@ResponseBody
 	public void test2(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 	
@@ -279,7 +270,7 @@ public class AndroidUploadController {
 	}
 	
 	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	//@RequestMapping(value = "/test", method = RequestMethod.GET)
 	@ResponseBody
 	public String test(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 	
@@ -384,10 +375,10 @@ public class AndroidUploadController {
 		try {
 			
 	        if("".equals(signatueFile))    
-	        	file=new File(webroot+"/resources/"+user+"/"+barCode+"-0.pdf"); 
+	        	file=new File(webroot+"/resources/"+user+"/"+barCode+"/"+barCode+"-0.pdf"); 
 	        else
-	        	file=new File(webroot+"/resources/"+user+"/"+barCode+".pdf");
-	        File pdfFolder = new File(webroot+"/resources/"+user);  
+	        	file=new File(webroot+"/resources/"+user+"/"+barCode+"/"+barCode+".pdf");
+	        File pdfFolder = new File(webroot+"/resources/"+user+"/"+barCode);  
 		    if (!pdfFolder.exists()) {  
 		    	pdfFolder.mkdirs();  
 		    }  
@@ -422,9 +413,9 @@ public class AndroidUploadController {
                 	outputStream.close();
                 }
                 if("".equals(signatueFile))
-                	ImageService.pdfToPng(webroot+"/resources/"+user+"/"+barCode+"-0.pdf", webroot+"/resources/"+user+"/"+barCode+"-0.png");
+                	ImageService.pdfToPng(webroot+"/resources/"+user+"/"+barCode+"/"+barCode+"-0.pdf", webroot+"/resources/"+user+"/"+barCode+"/"+barCode+"-0.png");
                 else
-                	ImageService.pdfToPng(webroot+"/resources/"+user+"/"+barCode+".pdf", webroot+"/resources/"+user+"/"+barCode+".png");
+                	ImageService.pdfToPng(webroot+"/resources/"+user+"/"+barCode+"/"+barCode+".pdf", webroot+"/resources/"+user+"/"+barCode+"/"+barCode+".png");
             } catch (Exception e) {  
                 e.printStackTrace();  
             }  
@@ -444,7 +435,7 @@ public class AndroidUploadController {
         Image barcodeImage = null, signatureImage = null,logo1=null,logo2=null;
       
         if(signatureFile!=null && !"".equals(signatureFile)){
-        	signatureImage=is.getImage(webroot+"resources/"+user+"/"+signatureFile);
+        	signatureImage=is.getImage(webroot+"resources/"+user+"/"+barCode+"/"+signatureFile);
         }
         //signatureImage=is.getPngImage(path+"20161205175259.jpg");
         logo1=is.getImage(path+"THMN_logo_vertical.jpg");
@@ -477,7 +468,7 @@ public class AndroidUploadController {
         item.setItem("Item 2");
         item.setDuration(3d);
         item.setAmount(100.00);
-        items.add(item);
+        //items.add(item);
         vo.setItems(items);
         l.add(vo);
 

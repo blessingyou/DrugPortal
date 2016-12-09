@@ -22,6 +22,7 @@ public class SecurityLoginFailureHandler extends
 			HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
 		String exceptoinType=exception.getMessage();//InvalidUser,InvalidSecurityCode
+		System.out.println("exceptoinType:"+exceptoinType);
 		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
 			String locale=(String)request.getSession(false).getAttribute("locale");
 			

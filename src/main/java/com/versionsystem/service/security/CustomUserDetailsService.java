@@ -76,8 +76,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 				
 			
 			}
-			else
+			else{
+				System.out.println("userId:"+userId+" is null");
 				throw new RuntimeException("InvalidUser");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

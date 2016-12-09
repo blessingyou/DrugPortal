@@ -65,6 +65,10 @@ public class MenusCtrl implements Serializable {
 	//bi-directional many-to-one association to MenusCtrlLocale
 	@OneToMany(mappedBy="menusCtrl")
 	private List<MenusCtrlLocale> menusCtrlLocales;
+	
+	
+	@OneToMany(mappedBy="menusCtrl")
+	private List<MenusCtrlAccess> menusCtrlAccesses;
 
 	public MenusCtrl() {
 	}
@@ -195,6 +199,15 @@ public class MenusCtrl implements Serializable {
 
 	public void setMenusCtrlLocales(List<MenusCtrlLocale> menusCtrlLocales) {
 		this.menusCtrlLocales = menusCtrlLocales;
+	}
+	
+
+	public List<MenusCtrlAccess> getMenusCtrlAccesses() {
+		return menusCtrlAccesses;
+	}
+
+	public void setMenusCtrlAccesses(List<MenusCtrlAccess> menusCtrlAccesses) {
+		this.menusCtrlAccesses = menusCtrlAccesses;
 	}
 
 	public MenusCtrlLocale addMenusCtrlLocale(MenusCtrlLocale menusCtrlLocale) {

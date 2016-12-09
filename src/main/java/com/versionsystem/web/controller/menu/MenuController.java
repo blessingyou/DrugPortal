@@ -26,8 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.versionsystem.common.ObjectConverter;
 import com.versionsystem.common.ResponseMap;
+import com.versionsystem.persistence.model.MenusCtrlAccess;
 import com.versionsystem.service.impl.menu.MenuService;
 import com.versionsystem.web.model.menu.LastestMenuListUI;
+import com.versionsystem.web.model.menu.MenuAccessUI;
 import com.versionsystem.web.model.menu.MenuUI;
 
 
@@ -163,6 +165,19 @@ public class MenuController {
         
         
     }
+	
+	@RequestMapping(value="/getMenuAccesses/{menuId}", method= RequestMethod.GET)
+	public List<MenuAccessUI> getMenuAccesses(@PathVariable long menuId) throws Exception{
+		try {	
+						
+				return menuService.getMenuAccessesById(menuId);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			return null;
+		}
+	}
 	
 
 }

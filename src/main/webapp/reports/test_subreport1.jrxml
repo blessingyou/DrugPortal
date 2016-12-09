@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="test_subreport1"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="291"
+		 pageHeight="120"
+		 columnWidth="291"
+		 columnSpacing="0"
+		 leftMargin="0"
+		 rightMargin="0"
+		 topMargin="0"
+		 bottomMargin="0"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false"
+		 isIgnorePagination="true">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<style 
+		name="chinesefont"
+		isDefault="false"
+		fontSize="8"
+		pdfFontName="STSong-Light"
+		pdfEncoding="UniGB-UCS2-H"
+		isPdfEmbedded="true"
+	>
+	</style>
+	<style 
+		name="englishfont"
+		isDefault="true"
+		fontName="Times New Roman"
+		fontSize="8"
+		pdfFontName="Times-Roman"
+		pdfEncoding="Cp1252"
+		isPdfEmbedded="true"
+	>
+	</style>
+
+
+	<field name="amount" class="java.lang.Double">
+		<fieldDescription><![CDATA[amount]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="duration" class="java.lang.Double">
+		<fieldDescription><![CDATA[duration]]></fieldDescription>
+	</field>
+	<field name="item" class="java.lang.String">
+		<fieldDescription><![CDATA[item]]></fieldDescription>
+	</field>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="12"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						style="englishfont"
+						mode="Opaque"
+						x="1"
+						y="0"
+						width="67"
+						height="12"
+						backcolor="#CCCCCC"
+						key="staticText-1"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[Items]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						mode="Opaque"
+						x="68"
+						y="0"
+						width="105"
+						height="12"
+						backcolor="#CCCCCC"
+						key="staticText-2"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[項目]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						mode="Opaque"
+						x="173"
+						y="0"
+						width="43"
+						height="12"
+						backcolor="#CCCCCC"
+						key="staticText-3"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[Durations]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						mode="Opaque"
+						x="216"
+						y="0"
+						width="24"
+						height="12"
+						backcolor="#CCCCCC"
+						key="staticText-4"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[天數]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="englishfont"
+						mode="Opaque"
+						x="240"
+						y="0"
+						width="30"
+						height="12"
+						backcolor="#CCCCCC"
+						key="staticText-5"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						style="chinesefont"
+						mode="Opaque"
+						x="270"
+						y="0"
+						width="21"
+						height="12"
+						backcolor="#CCCCCC"
+						key="staticText-6"/>
+					<box></box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[金額]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="12"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="1"
+						y="0"
+						width="172"
+						height="12"
+						forecolor="#0033FF"
+						key="textField-1"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
+</box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{item}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="173"
+						y="0"
+						width="66"
+						height="12"
+						forecolor="#0033FF"
+						key="textField-2"/>
+					<box leftPadding="2" rightPadding="2">					<bottomPen lineWidth="0.25"/>
+</box>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{duration}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						style="englishfont"
+						x="239"
+						y="0"
+						width="52"
+						height="12"
+						forecolor="#0033FF"
+						key="textField-3"/>
+					<box leftPadding="2" rightPadding="8">					<bottomPen lineWidth="0.25"/>
+</box>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{amount}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>
