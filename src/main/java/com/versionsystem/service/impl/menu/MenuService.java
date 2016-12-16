@@ -29,6 +29,7 @@ import com.versionsystem.common.BeanUtils;
 import com.versionsystem.common.BooleanExpressionUtils;
 import com.versionsystem.common.FilterRequest;
 import com.versionsystem.common.ResponseMap;
+import com.versionsystem.persistence.model.AppParaName;
 import com.versionsystem.persistence.model.LastestMenuList;
 import com.versionsystem.persistence.model.MenusCtrl;
 import com.versionsystem.persistence.model.MenusCtrlAccess;
@@ -38,6 +39,7 @@ import com.versionsystem.persistence.model.MenusCtrlLocale;
 import com.versionsystem.persistence.model.UserId;
 import com.versionsystem.service.impl.UserService;
 import com.versionsystem.service.repo.UserRepository;
+import com.versionsystem.service.repo.menu.AppParaNameRepository;
 import com.versionsystem.service.repo.menu.LastestMenuListRepository;
 import com.versionsystem.service.repo.menu.MenusCtrlAccessRepository;
 import com.versionsystem.service.repo.menu.MenusCtrlLocaleRepository;
@@ -61,6 +63,8 @@ public class MenuService {
 	private MenusCtrlLocaleRepository localeRepository;
 	@Autowired
 	private MenusCtrlAccessRepository accessRepository;
+	@Autowired
+	private AppParaNameRepository paraNameRepository;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -503,22 +507,81 @@ public class MenuService {
 		return  vo;
 	}
 	
+	public String saveMenuAllAccessLevel(List<MenuAccessUI> list){
+		String user=this.userService.getCurrentUser();
+		String accessText=null;
+		for(MenuAccessUI mu:list){
+			
+			MenusCtrlAccess ma=this.accessRepository.findOne(mu.getId());
+			if(ma==null){
+				ma=new MenusCtrlAccess();
+				ma.setCreateDate(new Timestamp(new Date().getTime()));
+				ma.setCreateUser(user);
+				MenusCtrl mc=this.repository.findOne(mu.getId());
+				ma.setMenusCtrl(mc);
+				ma.setParameterKey(mu.getParameterKey());
+				if(mu.getTicked())
+					ma.setParameterValue("Y");
+				else
+					ma.setParameterValue("N");
+				ma.setLastUpdateDate(ma.getCreateDate());
+				ma.setLastUpdateUser(user);
+				this.accessRepository.save(ma);
+				if("EditView".equals(ma.getParameterKey())){
+					if(mc!=null)
+						mc.setAllowedAction(ma.getParameterValue());
+				}
+					
+				
+			}else{
+				//ma.setParameterKey(mu.getParameterKey());
+				if(mu.getTicked())
+					ma.setParameterValue("Y");
+				else
+					ma.setParameterValue("N");
+				ma.setLastUpdateDate(ma.getCreateDate());
+				ma.setLastUpdateUser(user);
+				this.accessRepository.saveAndFlush(ma);
+				MenusCtrl mc=this.repository.findOne(mu.getId());
+				if("EditView".equals(ma.getParameterKey())){
+					if(mc!=null)
+						mc.setAllowedAction(ma.getParameterValue());
+				}
+			}
+			if(mu.getTicked())
+				accessText+=mu.getParameterKey()+"|";
+		}
+		
+		return accessText;
+	}
+	
+	private String getParaName(String key,String locale){
+		AppParaName apn=this.paraNameRepository.findByParameterKey(key);
+		if(apn!=null){
+			if("en-US".equals(locale))
+				return apn.getName();
+			else if("zh-CN".equals(locale))
+				return apn.getNameL3();
+			else
+				return apn.getNameL2();
+		}
+		return null;
+	}
+	
 	public List<MenuAccessUI> getMenuAccessesById(long id){
-		List<MenusCtrlAccess> l = this.accessRepository.findByMenusCtrlId(id);
+		List<MenusCtrlAccess> l = this.accessRepository.findByMenusCtrlIdOrderByParameterKeyAsc(id);
 		List<MenuAccessUI> rl=new ArrayList<MenuAccessUI>();
 		MenuAccessUI vo=null;
-		MenusCtrl mc=this.repository.findOne(id);
-		if(mc!=null){
-			
-		}
+		String locale=this.userService.getCurrentLocale();
 		boolean excel = false,edit=false;
 		for(MenusCtrlAccess o:l){
 			vo = new MenuAccessUI();
 			vo.setId(o.getId());
 			vo.setParameterKey(o.getParameterKey());
+			vo.setParameterName(this.getParaName(vo.getParameterKey(), locale));
 			vo.setParameterValue(o.getParameterValue());
 			vo.setMenuId(o.getMenusCtrl().getId());
-			if("Y".equals(vo.getParameterKey()))
+			if("Y".equals(vo.getParameterValue()))
 				vo.setTicked(true);
 			else
 				vo.setTicked(false);
@@ -532,9 +595,11 @@ public class MenuService {
 		}
 		if(!edit){
 			vo = new MenuAccessUI();
+			vo.setId(-1l);
 			vo.setParameterKey("EditView");
+			vo.setParameterName(this.getParaName(vo.getParameterKey(), locale));
 			vo.setParameterValue("Y");
-			if("Y".equals(vo.getParameterKey()))
+			if("Y".equals(vo.getParameterValue()))
 				vo.setTicked(true);
 			else
 				vo.setTicked(false);
@@ -543,7 +608,9 @@ public class MenuService {
 		}
 		if(!excel){
 			vo = new MenuAccessUI();
+			vo.setId(-1l);
 			vo.setParameterKey("ExportExcel");
+			vo.setParameterName(this.getParaName(vo.getParameterKey(), locale));
 			vo.setParameterValue("N");
 			vo.setMenuId(id);
 			if("Y".equals(vo.getParameterKey()))

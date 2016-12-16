@@ -10,7 +10,7 @@ import com.versionsystem.persistence.model.MenusCtrlAccess;
 
 public interface MenusCtrlAccessRepository extends JpaRepository<MenusCtrlAccess, Long>,QueryDslPredicateExecutor<MenusCtrlAccess> {
 	
-	public List<MenusCtrlAccess> findByMenusCtrlId(long menuId);
+	public List<MenusCtrlAccess> findByMenusCtrlIdOrderByParameterKeyAsc(long menuId);
 
 
 	

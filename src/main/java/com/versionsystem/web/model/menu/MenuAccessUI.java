@@ -22,11 +22,22 @@ public class MenuAccessUI {
 
 	
 	private String parameterKey;
+	private String parameterName;
 
 	
 	private String parameterValue;
 	
 	private Boolean ticked;
+
+
+	public String getParameterName() {
+		return parameterName;
+	}
+
+
+	public void setParameterName(String parameterName) {
+		this.parameterName = parameterName;
+	}
 
 
 	public Boolean getTicked() {

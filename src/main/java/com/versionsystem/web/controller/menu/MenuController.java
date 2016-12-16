@@ -166,6 +166,20 @@ public class MenuController {
         
     }
 	
+	@RequestMapping(value="/saveMenuAllAccessLevel", method= RequestMethod.POST)
+    public String saveMenuAllAccessLevel(@RequestBody List<MenuAccessUI> list) throws Exception {
+		try {
+			logger.info("saveMenuAllAccessLevel list size:"+list.size());
+			return menuService.saveMenuAllAccessLevel(list);
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("saveMenuAllAccessLevel",e);
+			return "";
+		}
+        
+        
+    }
+	
 	@RequestMapping(value="/getMenuAccesses/{menuId}", method= RequestMethod.GET)
 	public List<MenuAccessUI> getMenuAccesses(@PathVariable long menuId) throws Exception{
 		try {	
