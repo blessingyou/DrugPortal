@@ -3,7 +3,8 @@ package com.versionsystem.web.model.menu;
 import java.util.List;
 
 public class MenuUI {
-	private Long id = null;
+	private Long id = null;//admin meun id
+	private Long roleMenuId = null;//非ADMIN角色的菜單ID，用於控制access用
 	private String text = null;
 	private String widget=null;
 	private boolean hasChildren = false;
@@ -24,6 +25,12 @@ public class MenuUI {
 	List<MenuAccessUI>  otherActions;
 	
 	
+	public Long getRoleMenuId() {
+		return roleMenuId;
+	}
+	public void setRoleMenuId(Long roleMenuId) {
+		this.roleMenuId = roleMenuId;
+	}
 	public String getAllowedAction() {
 		return allowedAction;
 	}

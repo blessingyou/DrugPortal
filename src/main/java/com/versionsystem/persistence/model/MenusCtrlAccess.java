@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-@Table(name="W_MENUS_CTRL_ACCESS")
+@Table(name="APP_MENU_ACCESS")
 @NamedQuery(name="MenusCtrlAccess.findAll", query="SELECT w FROM MenusCtrlAccess w")
 public class MenusCtrlAccess implements Serializable {
 	private static final long serialVersionUID = 1L;

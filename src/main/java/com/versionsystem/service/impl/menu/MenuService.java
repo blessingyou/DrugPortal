@@ -238,6 +238,7 @@ public class MenuService {
 				for(MenusCtrl temp:l2){
 					if(temp.getSeqNo().equals(vo.getSeqNo())){
 						vo.setChecked(true);
+						vo.setRoleMenuId(temp.getId());
 						vo.setAllowedAction(temp.getAllowedAction());
 						if(temp.getAllowedAction()==null)
 							vo.setAllowedAction("N");
@@ -411,7 +412,7 @@ public class MenuService {
 		return true;
 		}catch(Exception e){
 			
-			logger.error(e.fillInStackTrace());
+			logger.error("error",e);
 			throw new ApplicationException(e.getMessage());
 		}
 	}
@@ -517,7 +518,7 @@ public class MenuService {
 				ma=new MenusCtrlAccess();
 				ma.setCreateDate(new Timestamp(new Date().getTime()));
 				ma.setCreateUser(user);
-				MenusCtrl mc=this.repository.findOne(mu.getId());
+				MenusCtrl mc=this.repository.findOne(mu.getMenuId());
 				ma.setMenusCtrl(mc);
 				ma.setParameterKey(mu.getParameterKey());
 				if(mu.getTicked())
@@ -542,7 +543,7 @@ public class MenuService {
 				ma.setLastUpdateDate(ma.getCreateDate());
 				ma.setLastUpdateUser(user);
 				this.accessRepository.saveAndFlush(ma);
-				MenusCtrl mc=this.repository.findOne(mu.getId());
+				MenusCtrl mc=this.repository.findOne(mu.getMenuId());
 				if("EditView".equals(ma.getParameterKey())){
 					if(mc!=null)
 						mc.setAllowedAction(ma.getParameterValue());

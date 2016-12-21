@@ -9,7 +9,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="APP_PARA_NAME")
+@Table(name="APP_MENU_ACCESS_NAME")
 @NamedQuery(name="AppParaName.findAll", query="SELECT a FROM AppParaName a")
 public class AppParaName implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -167,8 +167,20 @@ public class MenuController {
     }
 	
 	@RequestMapping(value="/saveMenuAllAccessLevel", method= RequestMethod.POST)
-    public String saveMenuAllAccessLevel(@RequestBody List<MenuAccessUI> list) throws Exception {
+    public String saveMenuAllAccessLevel(@RequestBody ArrayList<Map<String,Object>> models) throws Exception {
 		try {
+			List<MenuAccessUI> list=new ArrayList<MenuAccessUI>();
+			MenuAccessUI ui=null;
+			for (Map<String, Object> model : models) {
+				ui = new MenuAccessUI();
+				ui.setId(ObjectConverter.toLong(model.get("id")));
+				ui.setMenuId(ObjectConverter.toLong(model.get("menuId")));
+				ui.setParameterKey((String)model.get("parameterKey"));
+				ui.setParameterValue((String)model.get("parameterValue"));
+				ui.setTicked((Boolean)model.get("ticked"));
+				list.add(ui);
+	        	
+			}
 			logger.info("saveMenuAllAccessLevel list size:"+list.size());
 			return menuService.saveMenuAllAccessLevel(list);
 		} catch (Exception e) {
